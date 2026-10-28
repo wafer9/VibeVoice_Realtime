@@ -8,7 +8,7 @@
 
 ## 代码骨架
 
-按用户要求，以 `/nfs-speech-cfs/wangzhou/s2s/TwinLakes_cfg` 的骨架为基础：`run.sh`、`twinlakes.bin.train`、`Dataset/processor/padding`、`LMModel.from_audio_text_pretrained`、`Executor.train/cv`、`WarmupLR` 和 `.pt/.yaml` checkpoint。代码与测试统一使用本仓库的 `twinlakes/`，不另建独立训练框架或兼容包。用户已替换 twinlakes 源码；当前latent训练入口为 `conf/run_stage1_latent.yaml`（Qwen3-0.6B与VibeVoice原生DDPM训练head），`conf/run_stage1_fm.yaml` 仅保留为历史原型。清理时保留用户新版活跃模型计算路径；一阶声学MLP负分支forward已实现并通过小样本验证，FM和CFG推理仍待实现，不把旧原型验证算作当前验证。
+按用户要求，以 `/nfs-speech-cfs/wangzhou/s2s/TwinLakes_cfg` 的骨架为基础：`run.sh`、`twinlakes.bin.train`、`Dataset/processor/padding`、`LMModel.from_audio_text_pretrained`、`Executor.train/cv`、`WarmupLR` 和 `.pt/.yaml` checkpoint。代码与测试统一使用本仓库的 `twinlakes/`，不另建独立训练框架或兼容包。用户已替换 twinlakes 源码；当前latent训练入口为 `conf/run_stage1_latent.yaml`（Qwen3-0.6B与VibeVoice原生DDPM训练head），旧原型配置已按用户要求清理。清理时保留用户新版活跃模型计算路径；一阶声学MLP负分支forward已实现并通过小样本验证，FM和CFG推理仍待实现，不把旧原型验证算作当前验证。
 
 ## 固定方向
 

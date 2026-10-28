@@ -74,7 +74,7 @@ Gaussian noise → 条件 DiT 的 FM 采样 → z_i
                               反归一化 → 冻结 decoder → 音频
 ```
 
-LLM 使用预训练权重初始化并参与 TTS 训练。早期 FM 原型使用 `Qwen3-0.6B-Base`（LLM 596,049,920 参数、DiT 7,838,272 参数、总训练参数 605,012,545），配置保留于 [conf/run_stage1_fm.yaml](conf/run_stage1_fm.yaml)，这些数字不代表当前新版。当前实际 [latent训练配置](conf/run_stage1_latent.yaml) 使用完整28层 Qwen3-0.6B-Base，hidden_size=1024；factory 重新初始化 VibeVoice 原生4层扩散head并将hidden_size设为1024，head共54,923,264参数，未使用单独的diffusion_head_proj。LLM为596,049,920参数；加入一阶声学MLP负分支及audio_BOS后，总可训练参数为652,372,290（新增279,872）。Acoustic connector 与扩散head重新初始化，不默认沿用 Realtime 权重。当前训练目标仍是DDPM v-prediction，linear FM尚未接入。
+LLM 使用预训练权重初始化并参与 TTS 训练。早期 FM 原型使用 `Qwen3-0.6B-Base`（LLM 596,049,920 参数、DiT 7,838,272 参数、总训练参数 605,012,545），相关旧配置已按用户要求清理，这些历史数字不代表当前新版。当前实际 [latent训练配置](conf/run_stage1_latent.yaml) 使用完整28层 Qwen3-0.6B-Base，hidden_size=1024；factory 重新初始化 VibeVoice 原生4层扩散head并将hidden_size设为1024，head共54,923,264参数，未使用单独的diffusion_head_proj。LLM为596,049,920参数；加入一阶声学MLP负分支及audio_BOS后，总可训练参数为652,372,290（新增279,872）。Acoustic connector 与扩散head重新初始化，不默认沿用 Realtime 权重。当前训练目标仍是DDPM v-prediction，linear FM尚未接入。
 
 原先 FM 原型使用固定的“每次读取最多 5 个文本 token，再生成 6 个声学帧”的可见范围调度；当前用户新版输入完整目标文本，该流式调度尚未迁移。该调度不是 forced alignment；文字无法在目标音频结束前完全暴露的样本直接过滤，不截断目标音频或转写来凑长度。其对真实语音的对齐和流式质量仍需 P1/P2 验证。
 
