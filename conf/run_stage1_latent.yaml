@@ -1,0 +1,37 @@
+# Paired binary latent TARs. Use --data_type shard and train.list.
+temporal_model: /nfs-speech-cfs/wangzhou/.cache/models/Qwen3-0.6B-Base
+vibevoice_path: /nfs-speech-cfs/wangzhou/.cache/models/VibeVoice-1.5B
+tokenizer_config:
+  chat_template: /nfs-speech-cfs/wangzhou/.cache/models/Qwen2.5-7B-Instruct/chat_template.jinja
+dataset_conf:
+  filter_conf:
+    max_length: 30
+    min_length: 0.5
+    token_max_length: 500
+    token_min_length: 1
+  shuffle: true
+  shuffle_conf:
+    shuffle_size: 1500
+  sort: false
+  sort_conf:
+    sort_size: 1000
+  batch_conf:
+    batch_type: static
+    batch_size: 16
+  is_inference: false
+  chat: false
+  shard_latent: true
+  latent_codec_metadata: /data/joe/data/Emilia_latent_shards/train/_codec.json
+
+grad_clip: 1
+accum_grad: 2
+max_epoch: 5
+log_interval: 100
+optim_conf:
+  lr: 0.001
+scheduler_conf:
+  warmup_steps: 5000
+
+dtype: bf16
+freeze_diffusion_head: false
+run_name: vibe_qwen3_0p6b_latent

@@ -1,0 +1,24 @@
+# Baseline: machine 172, vibe environment, Python 3.11.14.
+# For the tested CUDA 12.1 build, install this pair before installing this file:
+# python -m pip install torch==2.4.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu121
+torch==2.4.1
+torchaudio==2.4.1
+transformers==4.57.3
+diffusers==0.34.0
+safetensors==0.7.0
+numpy==1.26.4
+scipy==1.13.1
+soundfile==0.13.1
+PyYAML==6.0.3
+tqdm==4.67.1
+
+# Training event writer and TensorBoard viewer.
+tensorboardX==2.6.4
+tensorboard==2.20.0
+
+# VibeVoiceTokenizerProcessor audio-file loading.
+librosa==0.11.0
+
+# Non-pip dependencies: GNU sort (global shuffle), NVIDIA driver for CUDA,
+# and an audio decoding backend for waveform/MP3 workflows (e.g. FFmpeg).
+# APEX, flash-attn and DeepSpeed are not required by the current training path.

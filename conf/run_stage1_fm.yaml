@@ -1,0 +1,72 @@
+# TwinLakes_cfg training skeleton; frozen codec + causal LLM + linear FM DiT.
+stage: 1
+temporal_model: /nfs-speech-cfs/wangzhou/.cache/models/Qwen3-0.6B-Base
+vibevoice_path: &codec_weights /nfs-speech-cfs/wangzhou/.cache/models/VibeVoice-1.5B
+run_name: realtime_qwen06b_fm_zero
+objective: flow_matching
+uncond_type: zero
+cfg_rate: 0.1
+freeze_diffusion_head: false
+
+codec:
+  source: /nfs-speech-cfs/wangzhou/s2s/TwinLakes_cfg
+  weights: *codec_weights
+  scale: 0.1962890625
+  bias: -0.04931640625
+
+diffusion_head_conf:
+  hidden_size: 384
+  layers: 4
+  heads: 6
+  ffn_ratio: 4
+
+streaming_conf:
+  text_chunk_size: 5
+  audio_chunk_size: 6
+  max_sequence_length: 2048
+
+data_conf:
+  paired_manifests:
+    - /nfs-speech-ali-nnn/wangzhou/nfs-speech-cfs/wangzhou/s2s/TwinLakes_vibevoice/data/emilia_sim/zh_en_prompt.list
+  audio_roots:
+    zh: /nfs-speech-cfs/ASR/opensource/Emilia/ZH
+    en: /nfs-speech-cfs/ASR/opensource/Emilia/EN
+  min_similarity: 0.8
+  min_target_seconds: 1.0
+  max_target_seconds: 20.0
+  prompt_seconds: [2.0, 5.0]
+  validation_fraction: 0.01
+  samples_per_shard: 256
+
+dataset_conf:
+  shard_latent: true
+  shuffle: true
+  shuffle_conf:
+    shuffle_size: 1500
+  sort: false
+  sort_conf:
+    sort_size: 1000
+  batch_conf:
+    batch_type: static
+    batch_size: 2
+
+seed: 20261026
+num_workers: 0
+grad_clip: 1.0
+accum_grad: 1
+max_epoch: 1000
+max_steps: 100000
+log_interval: 10
+save_interval: 1000
+eval_interval: 1000
+optim: adamw
+optim_conf:
+  lr: 0.0001
+  betas: [0.9, 0.95]
+  weight_decay: 0.01
+scheduler: warmuplr
+scheduler_conf:
+  warmup_steps: 500
+dtype: bf16
+gradient_checkpointing: true
+eos_weight: 0.1
